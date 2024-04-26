@@ -19,6 +19,7 @@ jobs:
     uses: "tweedegolf/actions-container-helpers/.github/workflows/container-image.yml@main"
     with:
         context: "${{ inputs.php_version }}"
+        file: "${{ inputs.php_version }}/Dockerfile"
         push: ${{ github.ref == 'refs/heads/main' }}
         platforms: "linux/amd64,linux/arm64"
         build-args: |
@@ -34,7 +35,7 @@ jobs:
     uses: "tweedegolf/actions-container-helpers/.github/workflows/container-image.yml@main"
     with:
         context: "${{ inputs.php_version }}"
-        file: Dockerfile.dev
+        file: "${{ inputs.php_version }}/Dockerfile.dev"
         push: ${{ github.ref == 'refs/heads/main' }}
         platforms: "linux/amd64,linux/arm64"
         tags: |
@@ -46,7 +47,7 @@ jobs:
     uses: "tweedegolf/actions-container-helpers/.github/workflows/container-image.yml@main"
     with:
         context: "${{ inputs.php_version }}"
-        file: Dockerfile.debug
+        file: "${{ inputs.php_version }}/Dockerfile.debug"
         push: ${{ github.ref == 'refs/heads/main' }}
         platforms: "linux/amd64,linux/arm64"
         tags: |
