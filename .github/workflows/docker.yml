@@ -1,0 +1,21 @@
+name: Docker
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - php_version: 8.3
+            latest: true
+          - php_version: 8.2
+            latest: false
+    uses: "./.github/workflows/docker-images.yml"
+    with:
+        php_version: ${{ matrix.php_version }}
+        latest: ${{ matrix.latest }}
+        debian_version: bookworm
+        postgresql_version: "16"
+        composer_version: "2.7.4"

@@ -1,0 +1,54 @@
+name: Docker
+
+on:
+  workflow_call:
+    inputs:
+      php_version:
+        type: string
+      latest:
+        type: boolean
+      composer_version:
+        type: string
+      debian_version:
+        type: string
+      postgresql_version:
+        type: string
+
+jobs:
+  base:
+    uses: "tweedegolf/actions-container-helpers/.github/workflows/container-image.yml@main"
+    with:
+        context: "${{ inputs.php_version }}"
+        push: ${{ github.ref == 'refs/heads/main' }}
+        platforms: "linux/amd64,linux/arm64"
+        build-args: |
+            DEBIAN_VERSION=${{ inputs.debian_version }}
+            POSTGRESQL_VERSION=${{ inputs.postgresql_version }}
+            COMPOSER_VERSION=${{ inputs.composer_version }}
+        tags: |
+            ghcr.io/tweedegolf/php:${{inputs.php_version}}
+            ${{ inputs.latest && 'ghcr.io/tweedegolf/php:latest' || '' }}
+
+  dev:
+    needs: [base]
+    uses: "tweedegolf/actions-container-helpers/.github/workflows/container-image.yml@main"
+    with:
+        context: "${{ inputs.php_version }}"
+        file: Dockerfile.dev
+        push: ${{ github.ref == 'refs/heads/main' }}
+        platforms: "linux/amd64,linux/arm64"
+        tags: |
+            ghcr.io/tweedegolf/php:${{inputs.php_version}}-dev
+            ${{ inputs.latest && 'ghcr.io/tweedegolf/php:latest-dev' || '' }}
+
+  debug:
+    needs: [dev]
+    uses: "tweedegolf/actions-container-helpers/.github/workflows/container-image.yml@main"
+    with:
+        context: "${{ inputs.php_version }}"
+        file: Dockerfile.debug
+        push: ${{ github.ref == 'refs/heads/main' }}
+        platforms: "linux/amd64,linux/arm64"
+        tags: |
+            ghcr.io/tweedegolf/php:${{inputs.php_version}}-debug
+            ${{ inputs.latest && 'ghcr.io/tweedegolf/php:latest-debug' || '' }}

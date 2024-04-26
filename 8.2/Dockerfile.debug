@@ -1,0 +1,9 @@
+FROM ghcr.io/tweedegolf/php:8.2-dev
+
+ENV PHP_VERSION 8.2
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        php${PHP_VERSION}-xdebug \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY xdebug.ini /etc/php/${PHP_VERSION}/mods-available/xdebug.ini
