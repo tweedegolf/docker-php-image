@@ -16,7 +16,7 @@ on:
 
 jobs:
   base:
-    uses: "tweedegolf/actions-container-helpers/.github/workflows/container-image.yml@main"
+    uses: "tweedegolf/actions-helpers/.github/workflows/container-image.yml@main"
     with:
         context: "${{ inputs.php_version }}"
         file: "${{ inputs.php_version }}/Dockerfile"
@@ -32,7 +32,7 @@ jobs:
 
   dev:
     needs: [base]
-    uses: "tweedegolf/actions-container-helpers/.github/workflows/container-image.yml@main"
+    uses: "tweedegolf/actions-helpers/.github/workflows/container-image.yml@main"
     with:
         context: "${{ inputs.php_version }}"
         file: "${{ inputs.php_version }}/Dockerfile.dev"
@@ -44,7 +44,7 @@ jobs:
 
   debug:
     needs: [dev]
-    uses: "tweedegolf/actions-container-helpers/.github/workflows/container-image.yml@main"
+    uses: "tweedegolf/actions-helpers/.github/workflows/container-image.yml@main"
     with:
         context: "${{ inputs.php_version }}"
         file: "${{ inputs.php_version }}/Dockerfile.debug"
