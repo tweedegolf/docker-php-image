@@ -1,11 +1,13 @@
 ARG DEBIAN_VERSION
 FROM ghcr.io/tweedegolf/debian:${DEBIAN_VERSION}
+ARG DEBIAN_VERSION
 
 # Install postgresql client
 ARG POSTGRESQL_VERSION
 ENV POSTGRESQL_VERSION ${POSTGRESQL_VERSION}
-RUN curl -s -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-    && echo "deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+RUN install -d /usr/share/postgresql-common/pgdg \
+    && curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+    && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] http://apt.postgresql.org/pub/repos/apt/ $DEBIAN_VERSION-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         postgresql-client-$POSTGRESQL_VERSION \
@@ -13,8 +15,9 @@ RUN curl -s -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add 
 
 # Install the custom PHP repository
 ENV PHP_VERSION 8.3
-RUN curl -s -L https://packages.sury.org/php/apt.gpg | apt-key add - \
-    && echo "deb https://packages.sury.org/php/ bookworm main" > /etc/apt/sources.list.d/sury_php.list \
+RUN curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
+    && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
+    && echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $DEBIAN_VERSION main" > /etc/apt/sources.list.d/php.list \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         php${PHP_VERSION}-bcmath \
