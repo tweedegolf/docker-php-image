@@ -12,10 +12,50 @@ jobs:
             latest: true
           - php_version: 8.2
             latest: false
-    uses: "./.github/workflows/docker-images.yml"
-    with:
-        php_version: ${{ matrix.php_version }}
-        latest: ${{ matrix.latest }}
-        debian_version: bookworm
-        postgresql_version: "16"
-        composer_version: "2.7.4"
+    env:
+      debian_version: bookworm
+      postgresql_version: "16"
+      composer_version: "2.7.6"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+
+      - name: Build the base image
+        uses: tweedegolf/build-container-image@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          context: "${{ matrix.php_version }}"
+          file: "${{ matrix.php_version }}/Dockerfile"
+          push: ${{ github.ref == 'refs/heads/main' }}
+          platforms: "linux/amd64,linux/arm64"
+          build-args: |
+            DEBIAN_VERSION=${{ env.debian_version }}
+            POSTGRESQL_VERSION=${{ env.postgresql_version }}
+            COMPOSER_VERSION=${{ env.composer_version }}
+          tags: |
+            ghcr.io/tweedegolf/php:${{matrix.php_version}}
+            ${{ matrix.latest && 'ghcr.io/tweedegolf/php:latest' || '' }}
+
+      - name: Build the development image
+        uses: tweedegolf/build-container-image@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          context: "${{ matrix.php_version }}"
+          file: "${{ matrix.php_version }}/Dockerfile.dev"
+          push: ${{ github.ref == 'refs/heads/main' }}
+          platforms: "linux/amd64,linux/arm64"
+          tags: |
+            ghcr.io/tweedegolf/php:${{matrix.php_version}}-dev
+            ${{ matrix.latest && 'ghcr.io/tweedegolf/php:latest-dev' || '' }}
+
+      - name: Build the debugging image
+        uses: tweedegolf/build-container-image@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          context: "${{ matrix.php_version }}"
+          file: "${{ matrix.php_version }}/Dockerfile.debug"
+          push: ${{ github.ref == 'refs/heads/main' }}
+          platforms: "linux/amd64,linux/arm64"
+          tags: |
+            ghcr.io/tweedegolf/php:${{matrix.php_version}}-debug
+            ${{ matrix.latest && 'ghcr.io/tweedegolf/php:latest-debug' || '' }}
