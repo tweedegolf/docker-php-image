@@ -52,6 +52,7 @@ RUN curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/deb
 COPY php-fpm.conf /etc/php/${PHP_VERSION}/fpm/php-fpm.conf
 COPY php.ini /etc/php/${PHP_VERSION}/fpm/php.ini
 COPY php.ini /etc/php/${PHP_VERSION}/cli/php.ini
+COPY apcu.ini /etc/php/${PHP_VERSION}/mods-available/apcu.ini
 
 # Install composer
 ARG COMPOSER_VERSION
