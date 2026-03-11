@@ -14,7 +14,7 @@ RUN install -d /usr/share/postgresql-common/pgdg \
     && rm -rf /var/lib/apt/lists/*
 
 # Install the custom PHP repository
-ENV PHP_VERSION=8.3
+ENV PHP_VERSION=8.4
 RUN curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
     && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
     && . /etc/os-release \
@@ -61,5 +61,5 @@ ENV COMPOSER_VERSION=${COMPOSER_VERSION}
 RUN curl -L -s -o /usr/local/bin/composer https://getcomposer.org/download/$COMPOSER_VERSION/composer.phar \
     && chmod a+x /usr/local/bin/composer
 
-CMD [ "/usr/sbin/php-fpm8.3" ]
+CMD [ "/usr/sbin/php-fpm8.4" ]
 EXPOSE 9000

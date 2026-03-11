@@ -8,14 +8,16 @@ jobs:
     strategy:
       matrix:
         include:
-          - php_version: 8.3
+          - php_version: 8.5
             latest: true
-          - php_version: 8.2
+          - php_version: 8.4
+            latest: false
+          - php_version: 8.3
             latest: false
     env:
-      debian_version: bookworm
-      postgresql_version: "17"
-      composer_version: "2.8.4"
+      debian_version: trixie
+      postgresql_version: "18"
+      composer_version: "2.9.5"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -27,7 +29,7 @@ jobs:
           context: "${{ matrix.php_version }}"
           file: "${{ matrix.php_version }}/Dockerfile"
           push: ${{ github.ref == 'refs/heads/main' }}
-          platforms: "linux/amd64,linux/arm64"
+          platforms: "linux/amd64"
           build-args: |
             DEBIAN_VERSION=${{ env.debian_version }}
             POSTGRESQL_VERSION=${{ env.postgresql_version }}
@@ -43,7 +45,7 @@ jobs:
           context: "${{ matrix.php_version }}"
           file: "${{ matrix.php_version }}/Dockerfile.dev"
           push: ${{ github.ref == 'refs/heads/main' }}
-          platforms: "linux/amd64,linux/arm64"
+          platforms: "linux/amd64"
           tags: |
             ghcr.io/tweedegolf/php:${{matrix.php_version}}-dev
             ${{ matrix.latest && 'ghcr.io/tweedegolf/php:latest-dev' || '' }}
@@ -55,7 +57,7 @@ jobs:
           context: "${{ matrix.php_version }}"
           file: "${{ matrix.php_version }}/Dockerfile.debug"
           push: ${{ github.ref == 'refs/heads/main' }}
-          platforms: "linux/amd64,linux/arm64"
+          platforms: "linux/amd64"
           tags: |
             ghcr.io/tweedegolf/php:${{matrix.php_version}}-debug
             ${{ matrix.latest && 'ghcr.io/tweedegolf/php:latest-debug' || '' }}

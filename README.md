@@ -2,8 +2,9 @@
 These images contain a mostly complete setup of PHP (including composer).
 Currently these tags are available:
 
-* PHP 8.3: `8.3`, `latest`
-* PHP 8.2: `8.2`
+* PHP 8.5: `8.5`, `latest`
+* PHP 8.4: `8.4`
+* PHP 8.3: `8.3`
 
 All images contain at least a PostgreSQL client, a relatively up-to-date
 version of composer and some of the most common PHP extensions. All images use
@@ -33,7 +34,7 @@ development setup:
 
     services:
       app:
-        image: ghcr.io/tweedegolf/php:8.3-dev
+        image: ghcr.io/tweedegolf/php:8.5-dev
         user: "$USER_ID:$GROUP_ID"
         volumes:
           - ".:/app"
@@ -55,7 +56,7 @@ up:
 
 See for example the Dockerfile below:
 
-    FROM ghcr.io/tweedegolf/php:8.3
+    FROM ghcr.io/tweedegolf/php:8.5
     RUN useradd -c Application -m -U app
     ENV ROOT_SWITCH_USER app
     ENV SYMFONY_ENV prod

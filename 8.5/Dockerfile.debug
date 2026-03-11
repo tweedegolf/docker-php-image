@@ -1,6 +1,6 @@
-FROM ghcr.io/tweedegolf/php:8.2-dev
+FROM ghcr.io/tweedegolf/php:8.5-dev
 
-ENV PHP_VERSION 8.2
+ENV PHP_VERSION 8.5
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         php${PHP_VERSION}-xdebug \
