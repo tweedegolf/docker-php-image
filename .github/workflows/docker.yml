@@ -29,7 +29,7 @@ jobs:
           context: "${{ matrix.php_version }}"
           file: "${{ matrix.php_version }}/Dockerfile"
           push: ${{ github.ref == 'refs/heads/main' }}
-          platforms: "linux/amd64"
+          platforms: "linux/amd64,linux/arm64"
           build-args: |
             DEBIAN_VERSION=${{ env.debian_version }}
             POSTGRESQL_VERSION=${{ env.postgresql_version }}
@@ -45,7 +45,7 @@ jobs:
           context: "${{ matrix.php_version }}"
           file: "${{ matrix.php_version }}/Dockerfile.dev"
           push: ${{ github.ref == 'refs/heads/main' }}
-          platforms: "linux/amd64"
+          platforms: "linux/amd64,linux/arm64"
           tags: |
             ghcr.io/tweedegolf/php:${{matrix.php_version}}-dev
             ${{ matrix.latest && 'ghcr.io/tweedegolf/php:latest-dev' || '' }}
@@ -57,7 +57,7 @@ jobs:
           context: "${{ matrix.php_version }}"
           file: "${{ matrix.php_version }}/Dockerfile.debug"
           push: ${{ github.ref == 'refs/heads/main' }}
-          platforms: "linux/amd64"
+          platforms: "linux/amd64,linux/arm64"
           tags: |
             ghcr.io/tweedegolf/php:${{matrix.php_version}}-debug
             ${{ matrix.latest && 'ghcr.io/tweedegolf/php:latest-debug' || '' }}
