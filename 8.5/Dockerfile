@@ -45,7 +45,6 @@ RUN curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/deb
         php${PHP_VERSION}-ast \
         php${PHP_VERSION}-imagick \
         php${PHP_VERSION}-memcache \
-        php${PHP_VERSION}-memcached \
         php${PHP_VERSION}-redis \
         php-pear \
     && rm -rf /var/lib/apt/lists/*
